@@ -114,7 +114,7 @@ glaas_2018_19<-dplyr::rename(glaas_2019,
                   "A1 Court recognized human rights to water"  = "A1_c_1.  Has the court recognized human rights to water in its decisions?",
                   "A1 Court recognized human right to sanitation" = "A1_c_2.  Has the court recognized human rights to sanitation in its decisions?",
                   "A1 Drinking water as a human right recognized year" = "A1_a_i_1_year",
-                  "A1 Sanitationas a human right recognized year" ="A1_a_i_2_year",
+                  "A1 Sanitation as a human right recognized year" ="A1_a_i_2_year",
                 
                   "A2 Has National Development Plan" = "A2.  Does your country have a national development plan?",
                   "A2 NDP addresses drinking water" ="A2_c.  If yes, does the national development plan address drinking-water?",

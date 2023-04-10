@@ -169,7 +169,7 @@ glaas_2021_22<-dplyr::rename(glaas_2021,
                       "A1 Drinking water as a human right recognized legally" ="A1_a_1",
                       "A1 Drinking water as a human right recognized year" ="A1_a_i_1",    
                       "A1 Sanitation as a human right recognized legally"="A1_a_2", # New in 2022
-                      "A1 Sanitationas a human right recognized year" ="A1_a_i_2", # New in 2022
+                      "A1 Sanitation as a human right recognized year" ="A1_a_i_2", # New in 2022
 
               ## water standards
                       "A3 Has urban national drinking-water quality standards"= "A2_a_1",
@@ -258,14 +258,26 @@ glaas_2021_22<-dplyr::rename(glaas_2021,
 
 glaas_2021_22$survey_cycle <-2021
 
-write.csv(glaas_2021_22, "glaas_2019.csv", row.names = FALSE )
+write.csv(glaas_2021_22, "glaas_2021.csv", row.names = FALSE )
 
 
 
 
 glaas_2018_2022<-rbind.fill(glaas_2018_19, glaas_2021_22)
 
+glaas_2018_2022$`A1 Drinking water as a human right recognized date`<-glaas_2018_2022$`A1 Drinking water as a human right recognized year`
+glaas_2018_2022$`A1 Drinking water as a human right recognized year`<-as.numeric(str_extract(string = glaas_2018_2022$`A1 Drinking water as a human right recognized date`, pattern ="\\b\\d{4}\\b")) 
+
+glaas_2018_2022$`A1 Sanitation as a human right recognized date` <-glaas_2018_2022$`A1 Sanitation as a human right recognized year`
+glaas_2018_2022$`A1 Sanitation as a human right recognized year`<-as.numeric(str_extract(string = glaas_2018_2022$`A1 Sanitation as a human right recognized date`, pattern ="\\b\\d{4}\\b")) 
+
+
+View(select(glaas_2018_2022, ISO3, `A1 Drinking water as a human right recognized date`, `A1 Drinking water as a human right recognized year`,`A1 Sanitation as a human right recognized date`,`A1 Sanitation as a human right recognized year`))
+class(glaas_2018_2022$`A1 Drinking water as a human right recognized year`)
+
+
+
 glaas_2018_2022 <-glaas_2018_2022[!is.na(glaas_2018_2022$ISO3),]
 
-write.csv(glaas_2018_2022, "glaas_2018_2022.csv", row.names = FALSE,fileEncoding ="UTF-8") #"latin1" "UTF-8"
+write.csv(glaas_2018_2022, "glaas_2018_2022.csv", row.names = FALSE,fileEncoding ="UTF-8") #"latin1" "iso-8859-1"
 
