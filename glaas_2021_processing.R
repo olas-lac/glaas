@@ -265,16 +265,38 @@ write.csv(glaas_2021_22, "glaas_2021.csv", row.names = FALSE )
 
 glaas_2018_2022<-rbind.fill(glaas_2018_19, glaas_2021_22)
 
+## Year cleaning 
+
 glaas_2018_2022$`A1 Drinking water as a human right recognized date`<-glaas_2018_2022$`A1 Drinking water as a human right recognized year`
 glaas_2018_2022$`A1 Drinking water as a human right recognized year`<-as.numeric(str_extract(string = glaas_2018_2022$`A1 Drinking water as a human right recognized date`, pattern ="\\b\\d{4}\\b")) 
 
 glaas_2018_2022$`A1 Sanitation as a human right recognized date` <-glaas_2018_2022$`A1 Sanitation as a human right recognized year`
 glaas_2018_2022$`A1 Sanitation as a human right recognized year`<-as.numeric(str_extract(string = glaas_2018_2022$`A1 Sanitation as a human right recognized date`, pattern ="\\b\\d{4}\\b")) 
 
+# Targets Cleaning
+glaas_2018_2022$`A7 Target value - National sanitation`<- as.numeric(str_extract(glaas_2018_2022$`A7 Target value - National sanitation`, "[-+]?\\d*\\.?\\d+"))
+glaas_2018_2022$`A7 Target value - National sanitation`<- ifelse(glaas_2018_2022$`A7 Target value - National sanitation`>100| glaas_2018_2022$ISO3 == "LCA", NA,  
+                                                                 ifelse(glaas_2018_2022$`A7 Target value - National sanitation` <=1, glaas_2018_2022$`A7 Target value - National sanitation`*100,glaas_2018_2022$`A7 Target value - National sanitation`))
 
-View(select(glaas_2018_2022, ISO3, `A1 Drinking water as a human right recognized date`, `A1 Drinking water as a human right recognized year`,`A1 Sanitation as a human right recognized date`,`A1 Sanitation as a human right recognized year`))
-class(glaas_2018_2022$`A1 Drinking water as a human right recognized year`)
+glaas_2018_2022$`A7 Latest value for the sanitation targets - National` <- as.numeric(str_extract(glaas_2018_2022$`A7 Latest value for the sanitation targets - National`, "[-+]?\\d*\\.?\\d+"))
+glaas_2018_2022$`A7 Latest value for the sanitation targets - National`<- ifelse(glaas_2018_2022$`A7 Latest value for the sanitation targets - National`>100| glaas_2018_2022$ISO3 == "LCA", NA, 
+                                                                                     ifelse(glaas_2018_2022$`A7 Latest value for the sanitation targets - National` <=1, glaas_2018_2022$`A7 Latest value for the sanitation targets - National`*100,glaas_2018_2022$`A7 Latest value for the sanitation targets - National`))
 
+
+
+
+glaas_2018_2022$`A7 Target Value - National drinking-water`<- as.numeric(str_extract(glaas_2018_2022$`A7 Target Value - National drinking-water`, "[-+]?\\d*\\.?\\d+"))
+glaas_2018_2022$`A7 Target Value - National drinking-water`<- ifelse(glaas_2018_2022$`A7 Target Value - National drinking-water`>100| glaas_2018_2022$ISO3 == "LCA", NA, 
+                                                                 ifelse(glaas_2018_2022$`A7 Target Value - National drinking-water` <=1, glaas_2018_2022$`A7 Target Value - National drinking-water`*100,glaas_2018_2022$`A7 Target Value - National drinking-water`))
+
+
+glaas_2018_2022$`A7 Latest value for the drinking-water targets - National` <- as.numeric(str_extract(glaas_2018_2022$`A7 Latest value for the drinking-water targets - National`, "[-+]?\\d*\\.?\\d+"))
+glaas_2018_2022$`A7 Latest value for the drinking-water targets - National`<- ifelse(glaas_2018_2022$`A7 Latest value for the drinking-water targets - National`>100| glaas_2018_2022$ISO3 == "LCA", NA, 
+                                                                     ifelse(glaas_2018_2022$`A7 Latest value for the drinking-water targets - National` <=1, glaas_2018_2022$`A7 Latest value for the drinking-water targets - National`*100,glaas_2018_2022$`A7 Latest value for the drinking-water targets - National`))
+
+
+
+select(glaas_2018_2022 ,ISO3,`A7 Target Value - National drinking-water`)
 
 
 glaas_2018_2022 <-glaas_2018_2022[!is.na(glaas_2018_2022$ISO3),]
