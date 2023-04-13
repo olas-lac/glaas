@@ -3,7 +3,7 @@
 library(tidyverse)
 library(readxl)
 library(plyr)
-a_ <- read_excel("glaas_2021_22_full_country_dataset.xlsx", sheet = "Section A Data",skip = 4)
+a_ <- read_excel("inputs/glaas_2021_22_full_country_dataset.xlsx", sheet = "Section A Data",skip = 4)
 
 variable_list <- a_[2,]
 variable_list_2<-pivot_longer(variable_list,1:length(variable_list))
@@ -240,25 +240,25 @@ glaas_2021_22<-dplyr::rename(glaas_2021,
 
 
 
-# Not in 2022     "A1 Court recognized human rights to water"  = "A1_c_1.  Has the court recognized human rights to water in its decisions?",
-# Not in 2022     "A1 Court recognized human right to sanitation" = "A1_c_2.  Has the court recognized human rights to sanitation in its decisions?",
-# Not in 2022     "A2 Has National Development Plan" = "A2.  Does your country have a national development plan?",
-# Not in 2022     "A2 NDP addresses drinking water" ="A2_c.  If yes, does the national development plan address drinking-water?",
-# Not in 2022     "A2 NDP addresses sanitation" ="A2_d.  If yes, does the national development plan address sanitation?",
-#"A3 Drinking-water surveillance requirements - urban" = "A3_b_1.  Are drinking-water quality surveillance requirements defined informal instruments - urban?",
-#"A3 Drinking-water surveillance requirements - rural" ="A3_b_2.  Are drinking-water quality surveillance requirements defined informal instruments - rural?",
-#"A3 Name and year of surveillance requirements" = "A3_b_i.  If yes, name and year of most recent instruments on surveillance requirements.",
-#"A3 Roles and responsibilities to ensure urban drinking-water safety formally defined"="A3_c_1.  Are roles and responsibilities to ensure drinking-water safety defined in formal instruments - urban?",
-#"A3 Roles and responsibilities to ensure rural drinking-water safety formally defined"="A3_c_2.  Are roles and responsibilities to ensure drinking-water safety defined in formal instruments - rural?",
-#"A3 WW surveillance requirements formally defined"= "A3_f.  Are wastewater surveillance requirements defined in formal instruments?",
-## Lead ministry
-#   "A6 Lead ministry - sanitation" = "A6_a_i. Lead ministry for setting targets - sanitation",
-#   "A6 Lead ministry - drinking-water" = "A6_a_ii. Lead ministry for setting targets - drinking-water",
-#   "A6 Lead ministry - hygiene" =  "A6_a_iii. Lead ministry for setting targets - hygiene",
+                      # Not in 2022     "A1 Court recognized human rights to water"  = "A1_c_1.  Has the court recognized human rights to water in its decisions?",
+                      # Not in 2022     "A1 Court recognized human right to sanitation" = "A1_c_2.  Has the court recognized human rights to sanitation in its decisions?",
+                      # Not in 2022     "A2 Has National Development Plan" = "A2.  Does your country have a national development plan?",
+                      # Not in 2022     "A2 NDP addresses drinking water" ="A2_c.  If yes, does the national development plan address drinking-water?",
+                      # Not in 2022     "A2 NDP addresses sanitation" ="A2_d.  If yes, does the national development plan address sanitation?",
+                      #"A3 Drinking-water surveillance requirements - urban" = "A3_b_1.  Are drinking-water quality surveillance requirements defined informal instruments - urban?",
+                      #"A3 Drinking-water surveillance requirements - rural" ="A3_b_2.  Are drinking-water quality surveillance requirements defined informal instruments - rural?",
+                      #"A3 Name and year of surveillance requirements" = "A3_b_i.  If yes, name and year of most recent instruments on surveillance requirements.",
+                      #"A3 Roles and responsibilities to ensure urban drinking-water safety formally defined"="A3_c_1.  Are roles and responsibilities to ensure drinking-water safety defined in formal instruments - urban?",
+                      #"A3 Roles and responsibilities to ensure rural drinking-water safety formally defined"="A3_c_2.  Are roles and responsibilities to ensure drinking-water safety defined in formal instruments - rural?",
+                      #"A3 WW surveillance requirements formally defined"= "A3_f.  Are wastewater surveillance requirements defined in formal instruments?",
+                      ## Lead ministry
+                      #   "A6 Lead ministry - sanitation" = "A6_a_i. Lead ministry for setting targets - sanitation",
+                      #   "A6 Lead ministry - drinking-water" = "A6_a_ii. Lead ministry for setting targets - drinking-water",
+                      #   "A6 Lead ministry - hygiene" =  "A6_a_iii. Lead ministry for setting targets - hygiene",
 
 glaas_2021_22$survey_cycle <-2021
 
-write.csv(glaas_2021_22, "glaas_2021.csv", row.names = FALSE )
+#write.csv(glaas_2021_22, "outputs/glaas_2021.csv", row.names = FALSE )
 
 
 
@@ -294,9 +294,6 @@ glaas_2018_2022$`A7 Latest value for the drinking-water targets - National` <- a
 glaas_2018_2022$`A7 Latest value for the drinking-water targets - National`<- ifelse(glaas_2018_2022$`A7 Latest value for the drinking-water targets - National`>100| glaas_2018_2022$ISO3 == "LCA", NA, 
                                                                      ifelse(glaas_2018_2022$`A7 Latest value for the drinking-water targets - National` <=1, glaas_2018_2022$`A7 Latest value for the drinking-water targets - National`*100,glaas_2018_2022$`A7 Latest value for the drinking-water targets - National`))
 
-
-
-select(glaas_2018_2022 ,ISO3,`A7 Target Value - National drinking-water`)
 
 
 glaas_2018_2022 <-glaas_2018_2022[!is.na(glaas_2018_2022$ISO3),]

@@ -1,9 +1,9 @@
 ## GLAAS Data for OLAS Platform
-
+rm(list = ls())
 library(tidyverse)
 
 library(readxl)
-a_ <- read_excel("glaas_2018_19_full_country_dataset_july-2021.xlsx", sheet = "Section A Data",skip = 7)
+a_ <- read_excel("inputs/glaas_2018_19_full_country_dataset_july-2021.xlsx", sheet = "Section A Data",skip = 7)
 a_lac <- a_[a_$`SDG Region` == "Latin America and the Caribbean",]
 
 table(a_lac$`A1_a_1.  Does the constitution  recognize drinking-water as a human right?`)
@@ -124,8 +124,8 @@ glaas_2018_19<-dplyr::rename(glaas_2019,
                    "A3 Has rural national drinking-water quality standards" = "A3_a_2.  Are formal national drinking-water quality standards or equivalent in place - rural?",
                    "A3 Name and year of drinking-water quality standards - urban" = "A3_a_i.  If yes, name and year of most recent drinking-water quality standards.",
                    "A3 Name and year of drinking-water quality standards - rural" = "A3_a_i.  If yes, name and year of most recent drinking-water quality standards.",
-                   "A3 Has urban drinking water serivce standards" = "A3_d_1.  Besides drinking-water quality, are formal national regulations or standards in place for drinking-water service delivery requirements - urban?",
-                   "A3 Has rural drinking water serivce standards" = "A3_d_2.  Besides drinking-water quality, are formal national regulations or standards in place for drinking-water service delivery requirements - rural?",
+                   "A3 Has urban drinking water service standards" = "A3_d_1.  Besides drinking-water quality, are formal national regulations or standards in place for drinking-water service delivery requirements - urban?",
+                   "A3 Has rural drinking water service standards" = "A3_d_2.  Besides drinking-water quality, are formal national regulations or standards in place for drinking-water service delivery requirements - rural?",
 
              
              
@@ -189,7 +189,7 @@ glaas_2018_19$survey_cycle <- 2018
 
 
 
-write.csv(glaas_2018_19, "glaas_2018_19.csv", row.names = FALSE )
+#write.csv(glaas_2018_19, "outputs/glaas_2018_19.csv", row.names = FALSE )
 
 
 
