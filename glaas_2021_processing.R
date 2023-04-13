@@ -298,5 +298,5 @@ glaas_2018_2022$`A7 Latest value for the drinking-water targets - National`<- if
 
 glaas_2018_2022 <-glaas_2018_2022[!is.na(glaas_2018_2022$ISO3),]
 
-write.csv(glaas_2018_2022, "glaas_2018_2022.csv", row.names = FALSE,fileEncoding ="UTF-8") #"latin1" "iso-8859-1"
+write.csv(glaas_2018_2022, "outputs/glaas_2018_2022.csv", row.names = FALSE,fileEncoding ="UTF-8") #"latin1" "iso-8859-1"
 
