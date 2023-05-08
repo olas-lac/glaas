@@ -32,6 +32,7 @@ glaas_2019<-select(a_lac,
               `A1_c_1.  Has the court recognized human rights to water in its decisions?`,
               `A1_c_2.  Has the court recognized human rights to sanitation in its decisions?`,
               `A2.  Does your country have a national development plan?`,
+              `A2_b.  If yes, timeframe for development plan.`,
               `A2_c.  If yes, does the national development plan address drinking-water?`,
               `A2_d.  If yes, does the national development plan address sanitation?`,
               ## water quality
@@ -117,6 +118,7 @@ glaas_2018_19<-dplyr::rename(glaas_2019,
                   "A1 Sanitation as a human right recognized year" ="A1_a_i_2_year",
                 
                   "A2 Has National Development Plan" = "A2.  Does your country have a national development plan?",
+                  "A2 Timeframe for Development Plan"="A2_b.  If yes, timeframe for development plan.",
                   "A2 NDP addresses drinking water" ="A2_c.  If yes, does the national development plan address drinking-water?",
                   "A2 NDP addresses sanitation" ="A2_d.  If yes, does the national development plan address sanitation?",
              ## water quality
@@ -189,7 +191,26 @@ glaas_2018_19$survey_cycle <- 2018
 
 
 
-#write.csv(glaas_2018_19, "outputs/glaas_2018_19.csv", row.names = FALSE )
+## Year cleaning 
+
+glaas_2018_19$`A1 Drinking water as a human right recognized date`<-glaas_2018_19$`A1 Drinking water as a human right recognized year`
+glaas_2018_19$`A1 Drinking water as a human right recognized year`<-as.numeric(str_extract(string = glaas_2018_19$`A1 Drinking water as a human right recognized date`, pattern ="\\b\\d{4}\\b")) 
+
+glaas_2018_19$`A1 Sanitation as a human right recognized date` <-glaas_2018_19$`A1 Sanitation as a human right recognized year`
+glaas_2018_19$`A1 Sanitation as a human right recognized year`<-as.numeric(str_extract(string = glaas_2018_19$`A1 Sanitation as a human right recognized date`, pattern ="\\b\\d{4}\\b")) 
+
+
+glaas_2018_19$temp<- str_extract(glaas_2018_19$`A2 Timeframe for Development Plan`,  pattern ="\\d{4}(?:(?!\\d{4}).)*?(\\d{4})")
+    glaas_2018_19$temp<- gsub('a', '-', glaas_2018_19$temp)
+    glaas_2018_19$temp<- gsub('to', '-', glaas_2018_19$temp)
+
+    glaas_2018_19<-glaas_2018_19%>%
+    separate(col = "temp", into = c("A2 NDP start year", "A2 NDP end year"), sep = "-")
+    
+    glaas_2018_19$`A2 NDP start year` <-str_trim(glaas_2018_19$`A2 NDP start year`, side = c("both"))
+    glaas_2018_19$`A2 NDP end year` <-str_trim(glaas_2018_19$`A2 NDP end year`, side = c("both"))  
+
+write.csv(glaas_2018_19, "outputs/glaas_2018_19.csv", row.names = FALSE )
 
 
 

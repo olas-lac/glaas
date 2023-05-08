@@ -115,7 +115,7 @@ glaas_2021<-select(a_lac,
                   ########### ALL NEW ###############
                   `A5_II_a_1`,  #Policy/plans address affordability measures for drinking-water
                   `A5_II_a_4`,	#Urban drinking-water policy/plan addresses affordability measures for drinking-water
-                  `A5_II_a_5`,	#Rural drinking-water policy/plan addresses affordability measures  for drinking-water
+                  `A5_II_a_5`,	#Rural drinking-water policy/plan addresses affordability measures for drinking-water
                   
                   `A5_II_b_1`,	#Policy/plans address access to safely managed drinking-water supply
                   `A5_II_c_1`,	#Policy/plans address household connections for drinking-water
@@ -178,7 +178,7 @@ glaas_2021_22<-dplyr::rename(glaas_2021,
                       "A3 Name and year of drinking-water quality standards - rural" = "A2_a_2_rur",
                       "A3 Has urban drinking water service standards" = "A2_b_1",
                       "A3 Has rural drinking water service standards" = "A2_b_2",
-                      "A3 National standards or guidelines for WASH in health care facilities " =`A2_f_i_1`,	# doesnt exist in 2018
+                      "A3 National standards or guidelines for WASH in health care facilities" =`A2_f_i_1`,	# doesnt exist in 2018
               
 
                       ## Sanitation standards 
@@ -191,6 +191,10 @@ glaas_2021_22<-dplyr::rename(glaas_2021,
                       "A3 Name and year of sanitation and WWT standards"= "A2_d_iii_wwt",
                       "A3 National planning incorporates climate change preparedness approaches for WASH" ="A3_e_1", # Missing in 2018
                       
+          
+                      "A3 Implementation of climate change preparedness approaches for local-level risk assessment and management of WASH" =`A4_e_1`,	#Implementation of climate change preparedness approaches for local-level risk assessment and management of WASH NEW
+              
+              
                       ## Policy status
                       "A5 Policy status - urban sanitation" = "A5_I_a",
                       "A5 Implementation plan status - urban sanitation" = `A5_I_b` ,                    
@@ -208,7 +212,7 @@ glaas_2021_22<-dplyr::rename(glaas_2021,
 
                       "A5 Policy/plans address affordability measures for drinking-water" =  `A5_II_a_1`,  
                       "A5 Urban drinking-water policy/plan addresses affordability measures for drinking-water" =`A5_II_a_4`,	
-                      "A5 Rural drinking-water policy/plan addresses affordability measures  for drinking-water" =  `A5_II_a_5`,	
+                      "A5 Rural drinking-water policy/plan addresses affordability measures for drinking-water" =  `A5_II_a_5`,	
               
                       "A5 Policy/plans address access to safely managed drinking-water supply"= `A5_II_b_1`,	
                       "A5 Policy/plans address household connections for drinking-water"= `A5_II_c_1`,	
@@ -258,7 +262,44 @@ glaas_2021_22<-dplyr::rename(glaas_2021,
 
 glaas_2021_22$survey_cycle <-2021
 
-#write.csv(glaas_2021_22, "outputs/glaas_2021.csv", row.names = FALSE )
+
+## Year cleaning 
+
+glaas_2021_22$`A1 Drinking water as a human right recognized date`<-glaas_2021_22$`A1 Drinking water as a human right recognized year`
+glaas_2021_22$`A1 Drinking water as a human right recognized year`<-as.numeric(str_extract(string = glaas_2021_22$`A1 Drinking water as a human right recognized date`, pattern ="\\b\\d{4}\\b")) 
+
+glaas_2021_22$`A1 Sanitation as a human right recognized date` <-glaas_2021_22$`A1 Sanitation as a human right recognized year`
+glaas_2021_22$`A1 Sanitation as a human right recognized year`<-as.numeric(str_extract(string = glaas_2021_22$`A1 Sanitation as a human right recognized date`, pattern ="\\b\\d{4}\\b")) 
+
+# Targets Cleaning
+glaas_2021_22$`A7 Target value - National sanitation`<- as.numeric(str_extract(glaas_2021_22$`A7 Target value - National sanitation`, "[-+]?\\d*\\.?\\d+"))
+glaas_2021_22$`A7 Target value - National sanitation`<- ifelse(glaas_2021_22$`A7 Target value - National sanitation`>100| glaas_2021_22$ISO3 == "LCA", NA,  
+                                                                 ifelse(glaas_2021_22$`A7 Target value - National sanitation` <=1, glaas_2021_22$`A7 Target value - National sanitation`*100,glaas_2021_22$`A7 Target value - National sanitation`))
+
+glaas_2021_22$`A7 Latest value for the sanitation targets - National` <- as.numeric(str_extract(glaas_2021_22$`A7 Latest value for the sanitation targets - National`, "[-+]?\\d*\\.?\\d+"))
+glaas_2021_22$`A7 Latest value for the sanitation targets - National`<- ifelse(glaas_2021_22$`A7 Latest value for the sanitation targets - National`>100| glaas_2021_22$ISO3 == "LCA", NA, 
+                                                                                 ifelse(glaas_2021_22$`A7 Latest value for the sanitation targets - National` <=1, glaas_2021_22$`A7 Latest value for the sanitation targets - National`*100,glaas_2021_22$`A7 Latest value for the sanitation targets - National`))
+
+
+
+
+glaas_2021_22$`A7 Target Value - National drinking-water`<- as.numeric(str_extract(glaas_2021_22$`A7 Target Value - National drinking-water`, "[-+]?\\d*\\.?\\d+"))
+glaas_2021_22$`A7 Target Value - National drinking-water`<- ifelse(glaas_2021_22$`A7 Target Value - National drinking-water`>100| glaas_2021_22$ISO3 == "LCA", NA, 
+                                                                     ifelse(glaas_2021_22$`A7 Target Value - National drinking-water` <=1, glaas_2021_22$`A7 Target Value - National drinking-water`*100,glaas_2021_22$`A7 Target Value - National drinking-water`))
+
+
+glaas_2021_22$`A7 Latest value for the drinking-water targets - National` <- as.numeric(str_extract(glaas_2021_22$`A7 Latest value for the drinking-water targets - National`, "[-+]?\\d*\\.?\\d+"))
+glaas_2021_22$`A7 Latest value for the drinking-water targets - National`<- ifelse(glaas_2021_22$`A7 Latest value for the drinking-water targets - National`>100| glaas_2021_22$ISO3 == "LCA", NA, 
+                                                                                     ifelse(glaas_2021_22$`A7 Latest value for the drinking-water targets - National` <=1, glaas_2021_22$`A7 Latest value for the drinking-water targets - National`*100,glaas_2021_22$`A7 Latest value for the drinking-water targets - National`))
+
+
+
+glaas_2021_22 <-glaas_2021_22[!is.na(glaas_2021_22$ISO3),]
+
+
+
+
+write.csv(glaas_2021_22, "outputs/glaas_2021.csv", row.names = FALSE )
 
 
 
@@ -295,8 +336,237 @@ glaas_2018_2022$`A7 Latest value for the drinking-water targets - National`<- if
                                                                      ifelse(glaas_2018_2022$`A7 Latest value for the drinking-water targets - National` <=1, glaas_2018_2022$`A7 Latest value for the drinking-water targets - National`*100,glaas_2018_2022$`A7 Latest value for the drinking-water targets - National`))
 
 
-
+names(glaas_2018_2022)
 glaas_2018_2022 <-glaas_2018_2022[!is.na(glaas_2018_2022$ISO3),]
+glaas_es<-glaas_2018_2022
+glaas_es<-dplyr::rename(glaas_es, 
+                         "Pais" = "Country",
+                        `A1 Tribunal reconoció los derechos humanos al agua`=`A1 Court recognized human rights to water`,
+                        `A1 Tribunal reconoció el derecho humano al saneamiento`=`A1 Court recognized human right to sanitation`,
+                        `A2 Tiene un plan de desarrollo nacional`=`A2 Has National Development Plan`,
+                        `A2 Plazo de tiempo vigente para el plan de desarrollo nacional`=`A2 Timeframe for Development Plan`,
+                        `A2 Año de inicio del plan de desarrollo nacional`=`A2 NDP start year`,
+                        `A2 Año de finalizació del plan de desarrollo nacional`=`A2 NDP end year`,
+                        `A2 Plan de desarrollo que aborda el agua potable`=`A2 NDP addresses drinking water`,
+                        `A2 Plan de desarrollo que aborda el saneamiento`=`A2 NDP addresses sanitation`,
+                        `A3 Tiene estándares nacionales de calidad del agua potable en zonas urbanas`=`A3 Has urban national drinking-water quality standards`,
+                        `A3 Tiene estándares nacionales de calidad del agua potable en zonas rurales`=`A3 Has rural national drinking-water quality standards`,
+                        `A3 Nombre y año de estándares de calidad de agua potable en zonas rurales`=`A3 Name and year of drinking-water quality standards - rural`,
+                        `A3 Requisitos de vigilancia del agua potable en zonas urbanas`=`A3 Drinking-water surveillance requirements - urban`,
+                        `A3 Requisitos de vigilancia del agua potable en zonas rurales`=`A3 Drinking-water surveillance requirements - rural`,
+                        `A3 Nombre y año de los requisitos de vigilancia`=`A3 Name and year of surveillance requirements`,
+                        `A3 Tiene estándares de servicio de agua potable en zonas urbanas`=`A3 Has urban drinking water service standards`,
+                        `A3 Tiene estándares de servicio de agua potable en zonas rurales`=`A3 Has rural drinking water service standards`,
+                        `A3 Funciones y responsabilidades para garantizar la seguridad del agua potable en zonas urbanas formalmente definidas`=`A3 Roles and responsibilities to ensure urban drinking-water safety formally defined`,
+                        `A3 Funciones y responsabilidades para garantizar la seguridad del agua potable en zonas rurales formalmente definidas`=`A3 Roles and responsibilities to ensure rural drinking-water safety formally defined`,
+                        `A3 Normas de WWT para saneamiento en el sitio`=`A3 WWT standards for onsite sanitation`,
+                        `A3 Normas de WWT para lodo fecales`=`A3 WWT standards for faecal sludge`,
+                        `A3 Estándares de WWT para aguas residuales`=`A3 WWT standards for wastewater`,
+                        `A3 Normas de WWT para reutilización segura`=`A3 WWT standards for safe reuse`,
+                        `A3 Requisitos de vigilancia de WWT definidos formalmente`=`A3 WW surveillance requirements formally defined`,
+                        `A3 Nombre y año de saneamiento y estándares de WWT`=`A3 Name and year of sanitation and WWT standards`,
+                        `A5 Estado de la política - WASH en las escuelas`=`A5 Policy status - WASH in schools`,
+                        `A5 Estado de la política - saneamiento en zonas urbanas`=`A5 Policy status - urban sanitation`,
+                        `A5 Estado del plan de implementación - saneamiento en zonas urbanas`=`A5 Implementation plan status - urban sanitation`,
+                        `A5 Estado de la política - saneamiento en zonas rurales`=`A5 Policy status - rural sanitation`,
+                        `A5 Estado del plan de implementación - saneamiento en zonas rurales`=`A5 Implementation plan status - rural sanitation`,
+                        `A5 Estado de la política - agua potable en zonas urbanas`=`A5 Policy status - urban drinking-water`,
+                        `A5 Estado del plan de implementación - agua potable en zonas urbanas`=`A5 Implementation plan status - urban drinking-water`,
+                        `A5 Estado de la política - agua potable en zonas rurales`=`A5 Policy status - rural drinking-water`,
+                        `A5 Estado del plan de implementación - agua potable en zonas rurales`=`A5 Implementation plan status - rural drinking-water`,
+                        `A6 Ministerio responsable - saneamiento`=`A6 Lead ministry - sanitation`,
+                        `A6 Ministerio responsable - agua potable`=`A6 Lead ministry - drinking-water`,
+                        `A6 Ministerio responsable - higiene`=`A6 Lead ministry - hygiene`,
+                        `A12 Mecanismos de coordinación de los ministerios`=`A12 Mechanisms to coordinate ministries`,
+                        `A12 Nombre del mecanismo de coordinación formal`=`A12 Name of formal coordination mechanism`,
+                        `A1 El agua potable como un derecho humano reconocido legalmente`=`A1 Drinking water as a human right recognized legally`,
+                        `A1 Saneamiento como un derecho humano reconocido legalmente`=`A1 Sanitation as a human right recognized legally`,
+                        `A1 Año de reconocimiento del agua potable como derecho humano`=`A1 Drinking water as a human right recognized year`,
+                        `A1 Año de reconocimiento del saneamiento como derecho humano`=`A1 Sanitation as a human right recognized year`,
+                        `Año de encuestas`=`survey_cycle`,
+                        `A1 El agua potable como derecho humano reconocido hasta la fecha`=`A1 Drinking water as a human right recognized date`,
+                        `A1 Saneamiento como derecho humano reconocido hasta la fecha`=`A1 Sanitation as a human right recognized date`,
+                        `A3 Nombre y año de estándares de calidad de agua potable en zonas urbanas`=`A3 Name and year of drinking-water quality standards - urban`,
+                        `A3 Estandares o directrices nacionales sobre WASH en los centros de atención médica`=`A3 National standards or guidelines for WASH in health care facilities`,
+                        `A3 La planificación nacional incorpora enfoques de preparación al cambio climático para WASH`=`A3 National planning incorporates climate change preparedness approaches for WASH`,
+                        `A3 Implementación de enfoques de preparación al cambio climático para la evaluación de riesgos a nivel local y la gestión de WASH`=`A3 Implementation of climate change preparedness approaches for local-level risk assessment and management of WASH`,
+                        `A5 Estado del plan de aplicación - WASH en las escuelas`=`A5 Implementation plan status - WASH in schools`,
+                        `A5 Estado de la política WASH en los centros de atención médica`=`A5 WASH in health care facilities policy status`,
+                        `A5 Estado del plan de aplicación - WASH en los centros de atención médica`=`A5 Implementation plan status - WASH in health care facilities`,
+                        `A5 Política/planes que abordan medidas de asequibilidad del agua potable`=`A5 Policy/plans address affordability measures for drinking-water`,
+                        `A5 Política/planes que aborda medidas de asequibilidad del agua potable en zonas rurales`=`A5 Urban drinking-water policy/plan addresses affordability measures for drinking-water`,
+                        `A5 Política/planes que aborda medidas de asequibilidad del agua potable en zonas urbanas`=`A5 Rural drinking-water policy/plan addresses affordability measures for drinking-water`,
+                        `A5 Política/planes que abordan el acceso a un suministro de agua potable gestionado de forma segura`=`A5 Policy/plans address access to safely managed drinking-water supply`,
+                        `A5 Política/planes que abordan las conexiones del hogar para el agua potable`=`A5 Policy/plans address household connections for drinking-water`,
+                        `A5 Política/planes que abordan medidas de asequibilidad para el saneamiento`=`A5 Policy/plans address Affordability measures for sanitation`,
+                        `A5 Política/planes que abordan medidas de asequibilidad a saneamiento en zonas urbanas`=`A5 Urban sanitation policy/plan addresses affordability measures for sanitation`,
+                        `A5 Política/planes que abordan medidas de asequibilidad a saneamiento en zonas rurales`=`A5 Rural sanitation policy/plan addresses affordability measures for sanitation`,
+                        `A5 Política/planes que incluyen uso seguro de aguas residuales municipales tratadas y lodo fecal municipal`=`A5 Policy/plans address Safe use of treated municipal wastewater and municipal faecal sludge`,
+                        `A5 Política/planes que abordan las instalaciones para la higiene de las manos`=`A5 Policy/plans address Hand hygiene facilities`,
+                        `A5 Política/planes que abordan los riesgos de la variabilidad climática y el cambio climático para los servicios WASH`=`A5 Policy/plans address Risks of climate variability and climate change to WASH services`,
+                        `A12 Parte interesada que dirige el mecanismo`=`A12 Stakeholder that leads mechanism`,
+                        `A7 Valor objetivo - Saneamiento nacional`=`A7 Target value - National sanitation`,
+                        `A7 Año objetivo - Saneamiento nacional`=`A7 Target year - National sanitation`,
+                        `A7 Valor objetivo - Agua potable nacional`=`A7 Target Value - National drinking-water`,
+                        `A7 Año objetivo - Agua potable nacional`=`A7 Target Year - National drinking-water`,
+                        `A7 Último valor para los objetivos de saneamiento nacional`=`A7 Latest value for the sanitation targets - National`,
+                        `A7 Último año para los objetivos de saneamiento nacional`=`A7 Latest value for the sanitation targets - National - year`,
+                        `A7 Último valor para los objetivos de agua potable nacional`=`A7 Latest value for the drinking-water targets - National`,
+                        `A7 Último año para los objetivos de agua potable nacional`=`A7 Latest value for the drinking-water targets - National - year`,)
 
-write.csv(glaas_2018_2022, "outputs/glaas_2018_2022.csv", row.names = FALSE,fileEncoding ="UTF-8") #"latin1" "iso-8859-1"
+glaas_2018_2022_final<-left_join(glaas_es, glaas_2018_2022, by=c("ISO3"= "ISO3", "Año de encuestas"="survey_cycle"))
+
+
+#The below creates duplicate rows?
+glaas_2018_2022_final2 <- dplyr::select(glaas_2018_2022_final,"ISO3", "Country", 'A1 Court recognized human right to sanitation',
+                                        'A1 Court recognized human rights to water',
+                                        'A1 Drinking water as a human right recognized date',
+                                        'A1 Drinking water as a human right recognized legally',
+                                        'A1 Drinking water as a human right recognized year',
+                                        'A1 Sanitation as a human right recognized date',
+                                        'A1 Sanitation as a human right recognized legally',
+                                        'A1 Sanitation as a human right recognized year',
+                                        'A2 Has National Development Plan',
+                                        'A2 NDP addresses drinking water',
+                                        'A2 NDP addresses sanitation',
+                                        'A2 NDP end year',
+                                        'A2 NDP start year',
+                                        'A2 Timeframe for Development Plan',
+                                        'A3 Drinking-water surveillance requirements - rural',
+                                        'A3 Drinking-water surveillance requirements - urban',
+                                        'A3 Has rural drinking water service standards',
+                                        'A3 Has rural national drinking-water quality standards',
+                                        'A3 Has urban drinking water service standards',
+                                        'A3 Has urban national drinking-water quality standards',
+                                        'A3 Implementation of climate change preparedness approaches for local-level risk assessment and management of WASH',
+                                        'A3 Name and year of drinking-water quality standards - rural',
+                                        'A3 Name and year of drinking-water quality standards - urban',
+                                        'A3 Name and year of sanitation and WWT standards',
+                                        'A3 Name and year of surveillance requirements',
+                                        'A3 National planning incorporates climate change preparedness approaches for WASH',
+                                        'A3 National standards or guidelines for WASH in health care facilities',
+                                        'A3 Roles and responsibilities to ensure rural drinking-water safety formally defined',
+                                        'A3 Roles and responsibilities to ensure urban drinking-water safety formally defined',
+                                        'A3 WW surveillance requirements formally defined',
+                                        'A3 WWT standards for faecal sludge',
+                                        'A3 WWT standards for onsite sanitation',
+                                        'A3 WWT standards for safe reuse',
+                                        'A3 WWT standards for wastewater',
+                                        'A5 Implementation plan status - rural drinking-water',
+                                        'A5 Implementation plan status - rural sanitation',
+                                        'A5 Implementation plan status - urban drinking-water',
+                                        'A5 Implementation plan status - urban sanitation',
+                                        'A5 Implementation plan status - WASH in health care facilities',
+                                        'A5 Implementation plan status - WASH in schools',
+                                        'A5 Policy status - rural drinking-water',
+                                        'A5 Policy status - rural sanitation',
+                                        'A5 Policy status - urban drinking-water',
+                                        'A5 Policy status - urban sanitation',
+                                        'A5 Policy status - WASH in schools',
+                                        'A5 Policy/plans address access to safely managed drinking-water supply',
+                                        'A5 Policy/plans address affordability measures for drinking-water',
+                                        'A5 Policy/plans address Affordability measures for sanitation',
+                                        'A5 Policy/plans address Hand hygiene facilities',
+                                        'A5 Policy/plans address household connections for drinking-water',
+                                        'A5 Policy/plans address Risks of climate variability and climate change to WASH services',
+                                        'A5 Policy/plans address Safe use of treated municipal wastewater and municipal faecal sludge',
+                                        'A5 Rural drinking-water policy/plan addresses affordability measures for drinking-water',
+                                        'A5 Rural sanitation policy/plan addresses affordability measures for sanitation',
+                                        'A5 Urban drinking-water policy/plan addresses affordability measures for drinking-water',
+                                        'A5 Urban sanitation policy/plan addresses affordability measures for sanitation',
+                                        'A5 WASH in health care facilities policy status',
+                                        'A6 Lead ministry - drinking-water',
+                                        'A6 Lead ministry - hygiene',
+                                        'A6 Lead ministry - sanitation',
+                                        'A7 Latest value for the drinking-water targets - National',
+                                        'A7 Latest value for the drinking-water targets - National - year',
+                                        'A7 Latest value for the sanitation targets - National',
+                                        'A7 Latest value for the sanitation targets - National - year',
+                                        'A7 Target Value - National drinking-water',
+                                        'A7 Target value - National sanitation',
+                                        'A7 Target Year - National drinking-water',
+                                        'A7 Target year - National sanitation',
+                                        'A12 Mechanisms to coordinate ministries',
+                                        'A12 Name of formal coordination mechanism',
+                                        'A12 Stakeholder that leads mechanism',
+                                        "Pais",
+                                        'A1 Año de reconocimiento del agua potable como derecho humano',
+                                        'A1 Año de reconocimiento del saneamiento como derecho humano',
+                                        'A1 El agua potable como derecho humano reconocido hasta la fecha',
+                                        'A1 El agua potable como un derecho humano reconocido legalmente',
+                                        'A1 Saneamiento como derecho humano reconocido hasta la fecha',
+                                        'A1 Saneamiento como un derecho humano reconocido legalmente',
+                                        'A1 Tribunal reconoció el derecho humano al saneamiento',
+                                        'A1 Tribunal reconoció los derechos humanos al agua',
+                                        'A2 Año de finalizació del plan de desarrollo nacional',
+                                        'A2 Año de inicio del plan de desarrollo nacional',
+                                        'A2 Plan de desarrollo que aborda el agua potable',
+                                        'A2 Plan de desarrollo que aborda el saneamiento',
+                                        'A2 Plazo de tiempo vigente para el plan de desarrollo nacional',
+                                        'A2 Tiene un plan de desarrollo nacional',
+                                        'A3 Estándares de WWT para aguas residuales',
+                                        'A3 Estandares o directrices nacionales sobre WASH en los centros de atención médica',
+                                        'A3 Funciones y responsabilidades para garantizar la seguridad del agua potable en zonas rurales formalmente definidas',
+                                        'A3 Funciones y responsabilidades para garantizar la seguridad del agua potable en zonas urbanas formalmente definidas',
+                                        'A3 Implementación de enfoques de preparación al cambio climático para la evaluación de riesgos a nivel local y la gestión de WASH',
+                                        'A3 La planificación nacional incorpora enfoques de preparación al cambio climático para WASH',
+                                        'A3 Nombre y año de estándares de calidad de agua potable en zonas rurales',
+                                        'A3 Nombre y año de estándares de calidad de agua potable en zonas urbanas',
+                                        'A3 Nombre y año de los requisitos de vigilancia',
+                                        'A3 Nombre y año de saneamiento y estándares de WWT',
+                                        'A3 Normas de WWT para lodo fecales',
+                                        'A3 Normas de WWT para reutilización segura',
+                                        'A3 Normas de WWT para saneamiento en el sitio',
+                                        'A3 Requisitos de vigilancia de WWT definidos formalmente',
+                                        'A3 Requisitos de vigilancia del agua potable en zonas rurales',
+                                        'A3 Requisitos de vigilancia del agua potable en zonas urbanas',
+                                        'A3 Tiene estándares de servicio de agua potable en zonas rurales',
+                                        'A3 Tiene estándares de servicio de agua potable en zonas urbanas',
+                                        'A3 Tiene estándares nacionales de calidad del agua potable en zonas rurales',
+                                        'A3 Tiene estándares nacionales de calidad del agua potable en zonas urbanas',
+                                        'A5 Estado de la política - agua potable en zonas rurales',
+                                        'A5 Estado de la política - agua potable en zonas urbanas',
+                                        'A5 Estado de la política - saneamiento en zonas rurales',
+                                        'A5 Estado de la política - saneamiento en zonas urbanas',
+                                        'A5 Estado de la política - WASH en las escuelas',
+                                        'A5 Estado de la política WASH en los centros de atención médica',
+                                        'A5 Estado del plan de aplicación - WASH en las escuelas',
+                                        'A5 Estado del plan de aplicación - WASH en los centros de atención médica',
+                                        'A5 Estado del plan de implementación - agua potable en zonas rurales',
+                                        'A5 Estado del plan de implementación - agua potable en zonas urbanas',
+                                        'A5 Estado del plan de implementación - saneamiento en zonas rurales',
+                                        'A5 Estado del plan de implementación - saneamiento en zonas urbanas',
+                                        'A5 Política/planes que aborda medidas de asequibilidad del agua potable en zonas rurales',
+                                        'A5 Política/planes que aborda medidas de asequibilidad del agua potable en zonas urbanas',
+                                        'A5 Política/planes que abordan el acceso a un suministro de agua potable gestionado de forma segura',
+                                        'A5 Política/planes que abordan las conexiones del hogar para el agua potable',
+                                        'A5 Política/planes que abordan las instalaciones para la higiene de las manos',
+                                        'A5 Política/planes que abordan los riesgos de la variabilidad climática y el cambio climático para los servicios WASH',
+                                        'A5 Política/planes que abordan medidas de asequibilidad a saneamiento en zonas rurales',
+                                        'A5 Política/planes que abordan medidas de asequibilidad a saneamiento en zonas urbanas',
+                                        'A5 Política/planes que abordan medidas de asequibilidad del agua potable',
+                                        'A5 Política/planes que abordan medidas de asequibilidad para el saneamiento',
+                                        'A5 Política/planes que incluyen uso seguro de aguas residuales municipales tratadas y lodo fecal municipal',
+                                        'A6 Ministerio responsable - agua potable',
+                                        'A6 Ministerio responsable - higiene',
+                                        'A6 Ministerio responsable - saneamiento',
+                                        'A7 Año objetivo - Agua potable nacional',
+                                        'A7 Año objetivo - Saneamiento nacional',
+                                        'A7 Último año para los objetivos de agua potable nacional',
+                                        'A7 Último año para los objetivos de saneamiento nacional',
+                                        'A7 Último valor para los objetivos de agua potable nacional',
+                                        'A7 Último valor para los objetivos de saneamiento nacional',
+                                        'A7 Valor objetivo - Agua potable nacional',
+                                        'A7 Valor objetivo - Saneamiento nacional',
+                                        'A12 Mecanismos de coordinación de los ministerios',
+                                        'A12 Nombre del mecanismo de coordinación formal',
+                                        'A12 Parte interesada que dirige el mecanismo',
+                                        'Año de encuestas')
+
+
+
+glaas_2018_2022_final2$survey_cycle <- glaas_2018_2022_final2$`Año de encuestas`
+
+
+write.csv(glaas_2018_2022_final2, "outputs/glaas_2018_2022.csv", row.names = FALSE,fileEncoding ="UTF-8") #"latin1" "iso-8859-1"
 
